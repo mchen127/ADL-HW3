@@ -43,7 +43,7 @@ def main():
     bnb_config = get_bnb_config()
     # Load base model
     base_model = AutoModelForCausalLM.from_pretrained(
-        args.base_model_path, quantization_config=bnb_config, device_map="auto"
+        args.base_model_path, quantization_config=bnb_config, device_map="single_device"
     )
 
     # Load Peft model

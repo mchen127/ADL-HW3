@@ -36,3 +36,8 @@ bash run.sh \
     ./data/public_test.json \
     ./output/predictions.json
 ```
+## Inference Strategy Compare
+You can try the inference strategies in `inference.ipynb`. The tested results are saved in `./strategy_compare`.
+
+## Learning Curve
+The learning curve plots are stored in `./results`

@@ -41,22 +41,22 @@ def main():
 
     args = parser.parse_args()
 
+    device = torch.device(args.device)
+    
     # Load tokenizer and model from the saved checkpoint
     tokenizer = AutoTokenizer.from_pretrained(
         args.base_model_path
     )
 
     bnb_config = get_bnb_config()
+    
     # Load base model
     base_model = AutoModelForCausalLM.from_pretrained(
-        args.base_model_path, quantization_config=bnb_config, device_map="auto"
-    )
+        args.base_model_path, quantization_config=bnb_config
+    ).to(device)
 
     # Load Peft model
-    model = PeftModel.from_pretrained(base_model, args.peft_path)
-
-    device = torch.device(args.device)
-    model.to(device)
+    model = PeftModel.from_pretrained(base_model, args.peft_path).to(device)
 
     # Load dataset
     with open(args.test_data_path, "r") as f:

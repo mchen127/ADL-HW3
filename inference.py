@@ -32,6 +32,12 @@ def main():
         required=True,
         help="Path to the output file (.json).",
     )
+    parser.add_argument(
+        "--device",
+        type=str,
+        default="cuda:0",
+        help="Device to run inference on (e.g., 'cuda:0')"
+    )
 
     args = parser.parse_args()
 
@@ -43,13 +49,13 @@ def main():
     bnb_config = get_bnb_config()
     # Load base model
     base_model = AutoModelForCausalLM.from_pretrained(
-        args.base_model_path, quantization_config=bnb_config, device_map="single_device"
+        args.base_model_path, quantization_config=bnb_config, device_map="auto"
     )
 
     # Load Peft model
     model = PeftModel.from_pretrained(base_model, args.peft_path)
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device(args.device)
     model.to(device)
 
     # Load dataset
